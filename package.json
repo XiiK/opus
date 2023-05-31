@@ -6,12 +6,16 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.14",
+    "@react-native-async-storage/async-storage": "^1.18.1",
+    "axios": "^1.4.0",
     "expo": "^48.0.7",
     "expo-constants": "~14.2.1",
     "expo-linking": "~4.0.1",
     "expo-router": "^1.2.0",
     "expo-splash-screen": "~0.18.1",
     "expo-status-bar": "~1.4.2",
+    "graphql": "^15.8.0",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-dom": "18.2.0",

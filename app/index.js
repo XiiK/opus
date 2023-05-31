@@ -1,12 +1,21 @@
-import { View, Text, SafeAreaView } from 'react-native'
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import { getAccount } from '../API/funcs'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import AppContext from '../func/AppContext'
+import { Redirect } from 'expo-router'
 
 export default function index () {
-  return (
-    <SafeAreaView className='text-red-600'>
-      <View className='bg-red-600'>
-        <Text>Index dio</Text>
-      </View>
-    </SafeAreaView>
-  )
+  const { account, setAccount } = useContext(AppContext)
+  useEffect(() => {
+    const getAccountAsync = async () => {
+      const token = await AsyncStorage.getItem('@jwt')
+      console.log('token', token)
+      if (!token) return
+      setAccount(await getAccount())
+    }
+    getAccountAsync()
+  }, [])
+  console.log('account', account)
+  if (!account) return <Redirect href='/login' />
+  else return <Redirect href='/home' />
 }
