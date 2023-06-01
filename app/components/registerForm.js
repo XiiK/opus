@@ -1,12 +1,14 @@
 import React, { useContext, useState } from 'react'
-import { View, TextInput, Button, Text } from 'react-native'
+import { View, TextInput, Text, TouchableOpacity } from 'react-native'
 import { registerUser } from '../../API/funcs'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import AppContext from '../../func/AppContext'
-import { Link } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 
-const onRegister = async ({ setAccount, email, password, type }) => {
-  const result = await registerUser({ email, password, type })
+const onRegister = async ({ setAccount, email, password, type, name }) => {
+  console.log('email, password', email, password)
+  const result = await registerUser({ email, password, type, name })
+  console.log('result', result)
   if (result?.error) return console.log('error', result?.error)
   await AsyncStorage.setItem('@jwt', result?.token || '')
   setAccount(result?.account)
@@ -30,17 +32,19 @@ const RegisterForm = () => {
   const handleNameChange = (text) => {
     setName(text)
   }
+  const router = useRouter()
+
   return (
     <View>
       <TextInput
-        className='border-2 border-black h-7 w-full'
+        className='border-2 rounded-md border-black h-10 m-4 p-2'
         placeholder='Email'
         type='email'
         onChangeText={handleEmailChange}
         value={email}
       />
       <TextInput
-        className='border-2 border-black h-7 w-full'
+        className='border-2 rounded-md border-black h-10 m-4 p-2'
         placeholder='Password'
         type='password'
         secureTextEntry
@@ -48,17 +52,29 @@ const RegisterForm = () => {
         value={password}
       />
       <TextInput
-        className='border-2 border-black h-7 w-full'
+        className='border-2 rounded-md border-black h-10 m-4 p-2'
         placeholder='Name'
         type='name'
         onChangeText={handleNameChange}
         value={name}
       />
-      <Text>Type: {type}</Text>
-      <Button title='Worker' onPress={() => setType('WORKER')} />
-      <Button title='Customer' onPress={() => setType('CUSTOMER')} />
-      <Button title='Register' onPress={() => onRegister({ setAccount, email, password, type, name })} />
-      <Link href='/login'>Login</Link>
+      <Text className='ml-4 text-xl'>Type: {type}</Text>
+      <View className='mt-4 flex items-center '>
+        <TouchableOpacity onPress={() => setType('WORKER')}>
+          <Text className='text-center w-32 mb-4 text-xl bg-pink-500 rounded-full px-4 py-2 text-white'>Worker</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setType('CUSTOMER')}>
+          <Text className='text-center w-32 mb-4 text-xl bg-pink-500 rounded-full px-4 py-2 text-white'>Customer</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {
+          onRegister({ setAccount, email, password, type, name })
+          router.push('/Home')
+        }}
+        >
+          <Text className='text-center w-32 mb-4 text-xl bg-pink-500 rounded-full px-4 py-2 text-white'>Register</Text>
+        </TouchableOpacity>
+        <Link className='text-center w-32 mb-4 text-xl bg-pink-500 rounded-full px-4 py-2 text-white' href='/login'>Login</Link>
+      </View>
     </View>
   )
 }

@@ -17,5 +17,5 @@ export default function index () {
   }, [])
   console.log('account', account)
   if (!account) return <Redirect href='/login' />
-  else return <Redirect href='/home' />
+  else return <Redirect href='/Home' />
 }

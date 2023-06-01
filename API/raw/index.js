@@ -11,5 +11,8 @@ export const callApi = async ({ query, variables }) => {
     query, variables
   }, { headers })
     .then(result => result?.data?.data || {})
-    .catch((error) => ({ error }))
+    .catch((error) => {
+      console.log('error', error)
+      return { error }
+    })
 }
